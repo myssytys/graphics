@@ -1,2 +1,5 @@
-# graphics
-Graphics programming in Vulkan and c++
+# gfx
+Vulkan main.cpp template for drawing a texturized cube.
+
+
+
