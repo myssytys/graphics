@@ -22,6 +22,8 @@
 #include <optional>
 #include <set>
 
+#include "Sphere.h"
+
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
 
@@ -72,12 +74,6 @@ struct SwapChainSupportDetails {
     std::vector<VkPresentModeKHR> presentModes;
 };
 
-/*struct Vertex {
-    glm::vec3 pos;
-    glm::vec4 color;
-    glm::vec2 texCoord;
-};*/
-
 struct Vertex {
     glm::vec3 pos;
     glm::vec4 color;
@@ -98,7 +94,7 @@ struct Vertex {
 
         attributeDescriptions[0].binding = 0;
         attributeDescriptions[0].location = 0;
-        attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
+        attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;        
         attributeDescriptions[0].offset = offsetof(Vertex, pos);
 
         attributeDescriptions[1].binding = 0;
@@ -168,7 +164,8 @@ class HelloTriangleApplication {
 public:
     void run() {
         initWindow();
-        initVulkan();
+        initMesh();
+        initVulkan();        
         mainLoop();
         cleanup();
     }
@@ -240,6 +237,13 @@ private:
         auto app = reinterpret_cast<HelloTriangleApplication*>(glfwGetWindowUserPointer(window));
         app->framebufferResized = true;
     }
+
+    void initMesh() {
+        Sphere sphere = Sphere(0.0f, 0.0f, 0.0f, 1.0f, 200, 200);
+        sphere.UVSphere();
+
+    }
+    //Sphere::Sphere(float centerX, float centerY, float centerZ, float radius, int hseg, int vseg) {
 
     void initVulkan() {
         createInstance();
