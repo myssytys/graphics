@@ -19,11 +19,19 @@ using namespace std;
 		dphi = 2*PI/(vseg-1);
 		dtheta = PI/(hseg-1);
 
-		vertices = new float[vseg*hseg];
-		indices = new int[vseg*hseg];
+		std::vector<float> vertices[hseg*vseg];
+		std::vector<int> indices[hseg*vseg];
+		std::vector<float> colors[hseg*vseg];
+		std::vector<float> normals[hseg*vseg];
+		std::vector<float> texCoords[hseg*vseg];
+		
+		
 		//icoindices = new int[120];
 		edge = new Edge[60];
 		this->radius = radius;
+		this->centerX = centerX;
+		this->centerY = centerY;
+		this->centerZ = centerZ;
 	}
 
 	void Sphere::UVSphere() {
@@ -41,9 +49,17 @@ using namespace std;
 
 				phi += dphi;
 
-				vertices[i*j] = sin(phi) * cos(theta);
-				vertices[i*j] = sin(phi) * sin(theta);
-				vertices[i*j] = cos(phi);
+				vertices[i*j] = centerX+( sin(phi)*radius * cos(theta)*radius);
+				vertices[i*j+1] = centerY+sin(phi)*radius * sin(theta)*radius;
+				vertices[i*j+2] = centerZ+cos(phi)*radius;
+
+				cout << "Vertex 1: " << vertices[i*j] << "Vertex 2: "<< vertices[i*j+1] << "Vertex 3: " <<vertices[i*j+2] << "\n";
+
+				indices[i*j] = i*j;
+				indices[i*j+1] = i*j+1;
+				indices[i*j+2] = i*j+2;
+
+				cout << "Indice 1: " << indices[i*j] << "Indice 2: "<< indices[i*j+1] << "Indice 3: " <<indices[i*j+2] << "\n";
 
 
 			}

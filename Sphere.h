@@ -11,6 +11,9 @@ public:
     } Edge ;
     Edge* edge;
     float* vertices;
+    float* normals;
+    float* colors;
+    float* texCoords;
     int* indices;
     float phi;
     float dphi;
@@ -19,6 +22,9 @@ public:
     int hseg;
     int vseg;
     float radius;
+    float centerX;
+    float centerY;
+    float centerZ;
 
     Sphere(float centerX, float centerY, float centerZ, float radius, int hseg, int vseg);
     void UVSphere();
