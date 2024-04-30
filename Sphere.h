@@ -16,6 +16,8 @@ public:
     float dtheta;
     int hseg;
     int vseg;
+    int i;
+    int j;
     float radius;
     float centerX;
     float centerY;

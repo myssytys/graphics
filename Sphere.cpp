@@ -12,16 +12,20 @@
 	Sphere::Sphere(float centerX, float centerY, float centerZ, float radius, int hseg, int vseg) {
 
 
+		std::cout << "Initializing sphere!\n";
+
+		std::cout << "Vseg: " << vseg << "Hseg: " << hseg;
+
 		phi = 0.0f;
 		theta = 0.0f;
 		dphi = 2*PI/(vseg-1);
 		dtheta = PI/(hseg-1);
 
-		std::vector<float> vertices[hseg*vseg];
-		std::vector<int> indices[hseg*vseg];
-		std::vector<float> colors[hseg*vseg];
-		std::vector<float> normals[hseg*vseg];
-		std::vector<float> texCoords[hseg*vseg];
+		std::vector<float> vertices;
+		std::vector<int> indices;
+		std::vector<float> colors;
+		std::vector<float> normals;
+		std::vector<float> texCoords;
 		
 		
 		//icoindices = new int[120];
@@ -30,35 +34,45 @@
 		this->centerX = centerX;
 		this->centerY = centerY;
 		this->centerZ = centerZ;
-	}
+		this->hseg = hseg;
+		this->vseg = vseg;
+
+		
+	};
 
 	void Sphere::UVSphere() {
 
 		int i,j;
 
+		std::cout << "Initializing UVSphere!\n";
+
 		dtheta = 2.0 * PI / (vseg - 1);	
 		dphi = PI / (hseg - 1);
 
-		for(i=0; i<hseg; i++) {
+		for(i=0; i<20; i++) {
 
 			theta += dtheta;
 
-			for(j=0;j<vseg;j++) {
+			for(j=0;j<20;j++) {
 
 				phi += dphi;
 
-				vertices[i*j] = centerX+( sin(phi)*radius * cos(theta)*radius);
-				vertices[i*j+1] = centerY+sin(phi)*radius * sin(theta)*radius;
-				vertices[i*j+2] = centerZ+cos(phi)*radius;
+				vertices.push_back( centerX+( sin(phi)*radius * cos(theta)*radius));
+				vertices.push_back(centerY+sin(phi)*radius * sin(theta)*radius );
+				vertices.push_back(centerZ+cos(phi)*radius);
 
 				std::cout << "Vertex 1: " << vertices[i*j] << "Vertex 2: "<< vertices[i*j+1] << "Vertex 3: " <<vertices[i*j+2] << "\n";
 
-				indices[i*j] = i*j;
-				indices[i*j+1] = i*j+1;
-				indices[i*j+2] = i*j+2;
+				indices.push_back(i*j);
+				indices.push_back(i*j+1);
+				indices.push_back(i*j+2);
 
 				std::cout << "Indice 1: " << indices[i*j] << "Indice 2: "<< indices[i*j+1] << "Indice 3: " <<indices[i*j+2] << "\n";
 
+				/*colors[i*j] = 1.0f;
+				colors[i*j+1] = 1.0f;
+				colors[i*j+2] = 1.0f;
+				colors[i*j+3] = 1.0f;*/
 
 			}
 
@@ -66,7 +80,7 @@
 
 		}
 
-	}
+	};
 
 	void Sphere::generateIcosahedron(float size) {
 
