@@ -6,8 +6,6 @@
 
 #include "Sphere.h"
 
-using namespace std;
-
 #define PI 3.14159265358979323846
 
 	// Constructor
@@ -27,7 +25,7 @@ using namespace std;
 		
 		
 		//icoindices = new int[120];
-		edge = new Edge[60];
+		//edge = new Edge[60];
 		this->radius = radius;
 		this->centerX = centerX;
 		this->centerY = centerY;
@@ -53,13 +51,13 @@ using namespace std;
 				vertices[i*j+1] = centerY+sin(phi)*radius * sin(theta)*radius;
 				vertices[i*j+2] = centerZ+cos(phi)*radius;
 
-				cout << "Vertex 1: " << vertices[i*j] << "Vertex 2: "<< vertices[i*j+1] << "Vertex 3: " <<vertices[i*j+2] << "\n";
+				std::cout << "Vertex 1: " << vertices[i*j] << "Vertex 2: "<< vertices[i*j+1] << "Vertex 3: " <<vertices[i*j+2] << "\n";
 
 				indices[i*j] = i*j;
 				indices[i*j+1] = i*j+1;
 				indices[i*j+2] = i*j+2;
 
-				cout << "Indice 1: " << indices[i*j] << "Indice 2: "<< indices[i*j+1] << "Indice 3: " <<indices[i*j+2] << "\n";
+				std::cout << "Indice 1: " << indices[i*j] << "Indice 2: "<< indices[i*j+1] << "Indice 3: " <<indices[i*j+2] << "\n";
 
 
 			}
@@ -91,7 +89,7 @@ using namespace std;
 	};
 
 
-    edge[0].a=0; edge[0].b=1;
+    /*edge[0].a=0; edge[0].b=1;
 	edge[1].a=0; edge[1].b=4;
 	edge[2].a=0; edge[2].b=5;
 	edge[3].a=0; edge[3].b=8;
@@ -120,9 +118,13 @@ using namespace std;
 	edge[26].a=7; edge[26].b=10;
 	edge[27].a=7; edge[27].b=11;
 	edge[28].a=8; edge[28].b=9;
-	edge[29].a=10; edge[29].b=11;
+	edge[29].a=10; edge[29].b=11;*/
 	
 	
+	}
+
+	int Sphere::getSize(const std::vector<float>& vec) {
+		return vec.size();
 	}
 
 	float Sphere::getRadius() {

@@ -43,6 +43,8 @@ const bool enableValidationLayers = false;
 const bool enableValidationLayers = true;
 #endif
 
+Sphere sphere = Sphere(0.0f, 0.0f, 0.0f, 1.0f, 200, 200);
+
 VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
     auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
     if (func != nullptr) {
@@ -83,7 +85,8 @@ struct Vertex {
     static VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
         bindingDescription.binding = 0;
-        bindingDescription.stride = sizeof(Vertex);
+        //bindingDescription.stride = sizeof(Vertex);
+        bindingDescription.stride = 0;
         bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
         return bindingDescription;
@@ -95,9 +98,9 @@ struct Vertex {
         attributeDescriptions[0].binding = 0;
         attributeDescriptions[0].location = 0;
         attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;        
-        attributeDescriptions[0].offset = offsetof(Vertex, pos);
+        //attributeDescriptions[0].offset = offsetof(Vertex, pos);
 
-        attributeDescriptions[1].binding = 0;
+        /*attributeDescriptions[1].binding = 0;
         attributeDescriptions[1].location = 1;
         attributeDescriptions[1].format = VK_FORMAT_R32G32B32A32_SFLOAT;
         attributeDescriptions[1].offset = offsetof(Vertex, color);
@@ -105,7 +108,7 @@ struct Vertex {
         attributeDescriptions[2].binding = 0;
         attributeDescriptions[2].location = 2;
         attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-        attributeDescriptions[2].offset = offsetof(Vertex, texCoord);
+        attributeDescriptions[2].offset = offsetof(Vertex, texCoord);*/
 
         return attributeDescriptions;
     }
@@ -117,7 +120,7 @@ struct UniformBufferObject {
     alignas(16) glm::mat4 proj;
 };
 
-static const std::vector<Vertex> vertices = {
+/*static const std::vector<Vertex> vertices = {
             // Vertices                 // Colors+Alpha     // Texcoord U+V
 		// front face 
 		{{-1.0f, -1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
@@ -150,6 +153,9 @@ static const std::vector<Vertex> vertices = {
 		{{1.0f, -1.0f, -1.0f},   {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
 		{{-1.0f, -1.0f, -1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
 };
+*/
+
+const std::vector<float> *vertices = &sphere.vertices;
 
 const std::vector<uint16_t> indices = {
     	 0, 1, 2,  2, 1, 3,	/* front */
@@ -239,7 +245,7 @@ private:
     }
 
     void initMesh() {
-        Sphere sphere = Sphere(0.0f, 0.0f, 0.0f, 1.0f, 200, 200);
+      //  Sphere sphere = Sphere(0.0f, 0.0f, 0.0f, 1.0f, 200, 200);
         sphere.UVSphere();
 
     }
@@ -952,7 +958,7 @@ private:
 
     void createVertexBuffer() {
             // Check this
-        VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();        
+        VkDeviceSize bufferSize = sizeof(sphere.vertices[0]) * sphere.vertices.size();        
     //  std::cout << "Sizeof(vertices[0]); ->" << sizeof(vertices[0]) << "\n vertices.size() ->" << vertices.size();
 
         VkBuffer stagingBuffer;
@@ -961,7 +967,7 @@ private:
 
         void* data;
         vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
-            memcpy(data, vertices.data(), (size_t) bufferSize);
+            memcpy(data, sphere.vertices.data(), (size_t) bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
 
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
@@ -973,7 +979,7 @@ private:
     }
 
     void createIndexBuffer() {
-        VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+        VkDeviceSize bufferSize = sizeof(sphere.indices[0]) * sphere.indices.size();
 
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
@@ -981,7 +987,7 @@ private:
 
         void* data;
         vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
-            memcpy(data, indices.data(), (size_t) bufferSize);
+            memcpy(data, sphere.indices.data(), (size_t) bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
 
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBuffer, indexBufferMemory);
