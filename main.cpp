@@ -79,33 +79,34 @@ struct SwapChainSupportDetails {
 struct Vertex {
     glm::vec3 pos;
     glm::vec4 color;
-    glm::vec2 texCoord;
+    //glm::vec2 texCoord;
 
 
     static VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
         bindingDescription.binding = 0;
-        //bindingDescription.stride = sizeof(Vertex);
-        bindingDescription.stride = 0;
+        bindingDescription.stride = sizeof(Vertex);
+        //bindingDescription.stride = 0;
         bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
         return bindingDescription;
     }
 
-    static std::array<VkVertexInputAttributeDescription, 3> getAttributeDescriptions() {
-        std::array<VkVertexInputAttributeDescription, 3> attributeDescriptions{};
+    static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions() {
+        std::array<VkVertexInputAttributeDescription, 2> attributeDescriptions{};
 
         attributeDescriptions[0].binding = 0;
         attributeDescriptions[0].location = 0;
         attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;        
-        //attributeDescriptions[0].offset = offsetof(Vertex, pos);
+        //attributeDescriptions[0].offset = 0;
+        attributeDescriptions[0].offset = offsetof(Vertex, pos);
 
-        /*attributeDescriptions[1].binding = 0;
+        attributeDescriptions[1].binding = 0;
         attributeDescriptions[1].location = 1;
         attributeDescriptions[1].format = VK_FORMAT_R32G32B32A32_SFLOAT;
         attributeDescriptions[1].offset = offsetof(Vertex, color);
 
-        attributeDescriptions[2].binding = 0;
+/*        attributeDescriptions[2].binding = 0;
         attributeDescriptions[2].location = 2;
         attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
         attributeDescriptions[2].offset = offsetof(Vertex, texCoord);*/
@@ -120,42 +121,42 @@ struct UniformBufferObject {
     alignas(16) glm::mat4 proj;
 };
 
-/*static const std::vector<Vertex> vertices = {
+static const std::vector<Vertex> vertices = {
             // Vertices                 // Colors+Alpha     // Texcoord U+V
 		// front face 
-		{{-1.0f, -1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
-		{{1.0f, -1.0f,  1.0f},   {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
-		{{-1.0f,  1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
-		{{1.0f,  1.0f,  1.0f},   {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+		{{-1.0f, -1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}},
+		{{1.0f, -1.0f,  1.0f},   {1.0f, 1.0f, 1.0f, 1.0f}},
+		{{-1.0f,  1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}},
+		{{1.0f,  1.0f,  1.0f},   {1.0f, 1.0f, 1.0f, 1.0f}},
 		 // back face 
-		{{1.0f, -1.0f, -1.0f},   {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
-		{{-1.0f, -1.0f, -1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
-		{{1.0f,  1.0f, -1.0f},   {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
-		{{-1.0f,  1.0f, -1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+		{{1.0f, -1.0f, -1.0f},   {1.0f, 0.0f, 1.0f, 1.0f}},
+		{{-1.0f, -1.0f, -1.0f},  {1.0f, 0.0f, 1.0f, 1.0f}},
+		{{1.0f,  1.0f, -1.0f},   {1.0f, 0.0f, 1.0f, 1.0f}},
+		{{-1.0f,  1.0f, -1.0f},  {1.0f, 0.0f, 1.0f, 1.0f}},
 		// left  face 
-		{{-1.0f, -1.0f, -1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
-		{{-1.0f, -1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
-		{{-1.0f,  1.0f, -1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
-		{{-1.0f,  1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+		{{-1.0f, -1.0f, -1.0f},  {1.0f, 1.0f, 0.0f, 1.0f}},
+		{{-1.0f, -1.0f,  1.0f},  {1.0f, 1.0f, 0.0f, 1.0f}},
+		{{-1.0f,  1.0f, -1.0f},  {1.0f, 1.0f, 0.0f, 1.0f}},
+		{{-1.0f,  1.0f,  1.0f},  {1.0f, 1.0f, 0.0f, 1.0f}},
 		// right face 
-		 {{1.0f, -1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
-		 {{1.0f, -1.0f, -1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
-		 {{1.0f,  1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
-		 {{1.0f,  1.0f, -1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+		 {{1.0f, -1.0f,  1.0f},  {1.0f, 0.0f, 0.0f, 1.0f}},
+		 {{1.0f, -1.0f, -1.0f},  {1.0f, 0.0f, 0.0f, 1.0f}},
+		 {{1.0f,  1.0f,  1.0f},  {1.0f, 0.0f, 0.0f, 1.0f}},
+		 {{1.0f,  1.0f, -1.0f},  {1.0f, 0.0f, 0.0f, 1.0f}},
 		// top face 
-		{{-1.0f,  1.0f,  1.0},  {1.0f, 1.0f, 1.0f, 0.5f},  {0.0f, 0.0f}},
-		{{1.0f,  1.0f,  1.0},   {1.0f, 1.0f, 1.0f, 0.5f},  {1.0f, 0.0f}},
-		{{-1.0f,  1.0f, -1.0},  {1.0f, 1.0f, 1.0f, 0.5f},  {0.0f, 1.0f}},
-		{{1.0f,  1.0f, -1.0},   {1.0f, 1.0f, 1.0f, 0.5f},  {1.0f, 1.0f}},
+		{{-1.0f,  1.0f,  1.0},  {0.0f, 0.0f, 1.0f, 0.5f}},
+		{{1.0f,  1.0f,  1.0},   {0.0f, 0.0f, 1.0f, 0.5f}},
+		{{-1.0f,  1.0f, -1.0},  {0.0f, 0.0f, 1.0f, 0.5f}},
+		{{1.0f,  1.0f, -1.0},   {0.0f, 0.0f, 1.0f, 0.5f}},
 		// bottom face 
-		{{1.0f, -1.0f,  1.0f},   {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
-		{{-1.0f, -1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
-		{{1.0f, -1.0f, -1.0f},   {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
-		{{-1.0f, -1.0f, -1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
+		{{1.0f, -1.0f,  1.0f},   {0.0f, 1.0f, 1.0f, 1.0f}},
+		{{-1.0f, -1.0f,  1.0f},  {0.0f, 1.0f, 1.0f, 1.0f}},
+		{{1.0f, -1.0f, -1.0f},   {0.0f, 1.0f, 1.0f, 1.0f}},
+		{{-1.0f, -1.0f, -1.0f},  {0.0f, 1.0f, 1.0f, 1.0f}}
 };
-*/
 
-const std::vector<float> *vertices = &sphere.vertices;
+
+//const std::vector<float> *vertices = &sphere.vertices;
 
 const std::vector<uint16_t> indices = {
     	 0, 1, 2,  2, 1, 3,	/* front */
@@ -264,9 +265,9 @@ private:
         createGraphicsPipeline();
         createFramebuffers();
         createCommandPool();
-        createTextureImage();
-        createTextureImageView();
-        createTextureSampler();
+//        createTextureImage();
+//        createTextureImageView();
+//        createTextureSampler();
         createVertexBuffer();
         createIndexBuffer();
         createUniformBuffers();
@@ -605,14 +606,15 @@ private:
         uboLayoutBinding.pImmutableSamplers = nullptr;
         uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
-        VkDescriptorSetLayoutBinding samplerLayoutBinding{};
+        /*VkDescriptorSetLayoutBinding samplerLayoutBinding{};
         samplerLayoutBinding.binding = 1;
         samplerLayoutBinding.descriptorCount = 1;
         samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
         samplerLayoutBinding.pImmutableSamplers = nullptr;
-        samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;*/
 
-        std::array<VkDescriptorSetLayoutBinding, 2> bindings = {uboLayoutBinding, samplerLayoutBinding};
+        //std::array<VkDescriptorSetLayoutBinding, 2> bindings = {uboLayoutBinding, samplerLayoutBinding};
+        std::array<VkDescriptorSetLayoutBinding, 1> bindings = {uboLayoutBinding};
         VkDescriptorSetLayoutCreateInfo layoutInfo{};
         layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
         layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
@@ -624,8 +626,8 @@ private:
     }
 
     void createGraphicsPipeline() {
-        auto vertShaderCode = readFile("shaders/vert.spv");
-        auto fragShaderCode = readFile("shaders/frag.spv");
+        auto vertShaderCode = readFile("shaders/vsphere.spv");
+        auto fragShaderCode = readFile("shaders/fsphere.spv");
 
         VkShaderModule vertShaderModule = createShaderModule(vertShaderCode);
         VkShaderModule fragShaderModule = createShaderModule(fragShaderCode);
@@ -958,8 +960,8 @@ private:
 
     void createVertexBuffer() {
             // Check this
-        VkDeviceSize bufferSize = sizeof(sphere.vertices[0]) * sphere.vertices.size();        
-    //  std::cout << "Sizeof(vertices[0]); ->" << sizeof(vertices[0]) << "\n vertices.size() ->" << vertices.size();
+        VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();        
+      std::cout << "Sizeof(vertices[0]); ->" << sizeof(vertices[0]) << "\n vertices.size() ->" << vertices.size();
 
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
@@ -967,7 +969,7 @@ private:
 
         void* data;
         vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
-            memcpy(data, sphere.vertices.data(), (size_t) bufferSize);
+            memcpy(data, vertices.data(), (size_t) bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
 
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
@@ -979,7 +981,7 @@ private:
     }
 
     void createIndexBuffer() {
-        VkDeviceSize bufferSize = sizeof(sphere.indices[0]) * sphere.indices.size();
+        VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
 
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
@@ -987,7 +989,7 @@ private:
 
         void* data;
         vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
-            memcpy(data, sphere.indices.data(), (size_t) bufferSize);
+            memcpy(data, indices.data(), (size_t) bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
 
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBuffer, indexBufferMemory);
@@ -1013,11 +1015,11 @@ private:
     }
 
     void createDescriptorPool() {
-        std::array<VkDescriptorPoolSize, 2> poolSizes{};
+        std::array<VkDescriptorPoolSize, 1> poolSizes{};
         poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         poolSizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
-        poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        poolSizes[1].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+        /*poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+        poolSizes[1].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);*/
 
         VkDescriptorPoolCreateInfo poolInfo{};
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
@@ -1049,12 +1051,12 @@ private:
             bufferInfo.offset = 0;
             bufferInfo.range = sizeof(UniformBufferObject);
 
-            VkDescriptorImageInfo imageInfo{};
+            /*VkDescriptorImageInfo imageInfo{};
             imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             imageInfo.imageView = textureImageView;
-            imageInfo.sampler = textureSampler;
+            imageInfo.sampler = textureSampler;*/
 
-            std::array<VkWriteDescriptorSet, 2> descriptorWrites{};
+            std::array<VkWriteDescriptorSet, 1> descriptorWrites{};
 
             descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
             descriptorWrites[0].dstSet = descriptorSets[i];
@@ -1064,13 +1066,13 @@ private:
             descriptorWrites[0].descriptorCount = 1;
             descriptorWrites[0].pBufferInfo = &bufferInfo;
 
-            descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+            /*descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
             descriptorWrites[1].dstSet = descriptorSets[i];
             descriptorWrites[1].dstBinding = 1;
             descriptorWrites[1].dstArrayElement = 0;
             descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
             descriptorWrites[1].descriptorCount = 1;
-            descriptorWrites[1].pImageInfo = &imageInfo;
+            descriptorWrites[1].pImageInfo = &imageInfo;*/
 
             vkUpdateDescriptorSets(device, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
         }
