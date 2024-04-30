@@ -49,11 +49,11 @@
 		dtheta = 2.0 * PI / (vseg - 1);	
 		dphi = PI / (hseg - 1);
 
-		for(i=0; i<20; i++) {
+		for(i=0; i<hseg; i++) {
 
 			theta += dtheta;
 
-			for(j=0;j<20;j++) {
+			for(j=0;j<vseg;j++) {
 
 				phi += dphi;
 
