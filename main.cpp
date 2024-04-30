@@ -43,7 +43,7 @@ const bool enableValidationLayers = false;
 const bool enableValidationLayers = true;
 #endif
 
-Sphere sphere = Sphere(0.0f, 0.0f, 0.0f, 1.0f, 200, 200);
+Sphere sphere = Sphere(0.0f, 0.0f, 0.0f, 1.0f, 20, 20);
 
 VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
     auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
@@ -121,7 +121,7 @@ struct UniformBufferObject {
     alignas(16) glm::mat4 proj;
 };
 
-static const std::vector<Vertex> vertices = {
+/*static const std::vector<Vertex> vertices = {
             // Vertices                 // Colors+Alpha     // Texcoord U+V
 		// front face 
 		{{-1.0f, -1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}},
@@ -153,7 +153,7 @@ static const std::vector<Vertex> vertices = {
 		{{-1.0f, -1.0f,  1.0f},  {0.0f, 1.0f, 1.0f, 1.0f}},
 		{{1.0f, -1.0f, -1.0f},   {0.0f, 1.0f, 1.0f, 1.0f}},
 		{{-1.0f, -1.0f, -1.0f},  {0.0f, 1.0f, 1.0f, 1.0f}}
-};
+};*/
 
 
 //const std::vector<float> *vertices = &sphere.vertices;
@@ -171,7 +171,7 @@ class HelloTriangleApplication {
 public:
     void run() {
         initWindow();
-        initMesh();
+        initMesh();                
         initVulkan();        
         mainLoop();
         cleanup();
@@ -238,6 +238,7 @@ private:
         window = glfwCreateWindow(WIDTH, HEIGHT, "Vulkan", nullptr, nullptr);
         glfwSetWindowUserPointer(window, this);
         glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
+        
     }
 
     static void framebufferResizeCallback(GLFWwindow* window, int width, int height) {
@@ -246,7 +247,6 @@ private:
     }
 
     void initMesh() {
-      //  Sphere sphere = Sphere(0.0f, 0.0f, 0.0f, 1.0f, 200, 200);
         sphere.UVSphere();
 
     }
@@ -312,11 +312,11 @@ private:
 
         vkDestroyDescriptorPool(device, descriptorPool, nullptr);
 
-        vkDestroySampler(device, textureSampler, nullptr);
-        vkDestroyImageView(device, textureImageView, nullptr);
+        //vkDestroySampler(device, textureSampler, nullptr);
+        //vkDestroyImageView(device, textureImageView, nullptr);
 
-        vkDestroyImage(device, textureImage, nullptr);
-        vkFreeMemory(device, textureImageMemory, nullptr);
+        //vkDestroyImage(device, textureImage, nullptr);
+        //vkFreeMemory(device, textureImageMemory, nullptr);
 
         vkDestroyDescriptorSetLayout(device, descriptorSetLayout, nullptr);
 
@@ -960,8 +960,8 @@ private:
 
     void createVertexBuffer() {
             // Check this
-        VkDeviceSize bufferSize = sizeof(vertices[0]) * vertices.size();        
-      std::cout << "Sizeof(vertices[0]); ->" << sizeof(vertices[0]) << "\n vertices.size() ->" << vertices.size();
+        VkDeviceSize bufferSize = sizeof(sphere.vertices[0]) * sphere.vertices.size();        
+      std::cout << "Sizeof(vertices[0]); ->" << sizeof(sphere.vertices[0]) << "\n vertices.size() ->" << sphere.getSize(sphere.vertices);
 
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
@@ -969,7 +969,7 @@ private:
 
         void* data;
         vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
-            memcpy(data, vertices.data(), (size_t) bufferSize);
+            memcpy(data, sphere.vertices.data(), (size_t) bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
 
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
