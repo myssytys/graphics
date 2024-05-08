@@ -37,6 +37,39 @@ Cube::Cube() {
 		{-1.0, -1.0, -1.0},
 	};
 
+	std::vector<glm::vec2> texCoords {
+		// Front face
+		{0.0f, 0.0f},
+		{1.0f, 0.0f},
+		{0.0f, 1.0f},
+		{1.0f, 1.0f},
+		// Back face
+		{0.0f, 0.0f},
+		{1.0f, 0.0f},
+		{0.0f, 1.0f},
+		{1.0f, 1.0f},
+		// left face
+		{0.0f, 0.0f},
+		{1.0f, 0.0f},
+		{0.0f, 1.0f},
+		{1.0f, 1.0f},
+		// right face
+		{0.0f, 0.0f},
+		{1.0f, 0.0f},
+		{0.0f, 1.0f},
+		{1.0f, 1.0f},
+		// top face
+		{0.0f, 0.0f},
+		{1.0f, 0.0f},
+		{0.0f, 1.0f},
+		{1.0f, 1.0f},
+		// bottom face
+		{0.0f, 0.0f},
+		{1.0f, 0.0f},
+		{0.0f, 1.0f},
+		{1.0f, 1.0f}
+	};
+
 
 	std::vector<int> indices={
 		 0, 1, 2,  2, 1, 3,	/* front */
