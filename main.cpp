@@ -23,6 +23,7 @@
 #include <set>
 
 #include "Sphere.h"
+#include "Cube.h"
 
 const uint32_t WIDTH = 800;
 const uint32_t HEIGHT = 600;
@@ -44,6 +45,7 @@ const bool enableValidationLayers = true;
 #endif
 
 Sphere sphere = Sphere(0.0f, 0.0f, 0.0f, 1.0f, 20, 20);
+Cube cube = Cube();
 
 VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
     auto func = (PFN_vkCreateDebugUtilsMessengerEXT) vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
@@ -78,14 +80,17 @@ struct SwapChainSupportDetails {
 
 struct Vertex {
     glm::vec3 pos;
-    glm::vec4 color;
+    glm::vec4 color;    
     //glm::vec2 texCoord;
+    
+};
 
 
-    static VkVertexInputBindingDescription getBindingDescription() {
+
+    VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
         bindingDescription.binding = 0;
-        bindingDescription.stride = sizeof(Vertex);
+        bindingDescription.stride = sizeof(Cube::Vertex);
         //bindingDescription.stride = 0;
         bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
@@ -99,21 +104,23 @@ struct Vertex {
         attributeDescriptions[0].location = 0;
         attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;        
         //attributeDescriptions[0].offset = 0;
-        attributeDescriptions[0].offset = offsetof(Vertex, pos);
+        attributeDescriptions[0].offset = offsetof(Cube::Vertex, Cube::Vertex::pos);
+        std::cout << "Offset of pos: " << offsetof(Cube::Vertex, Cube::Vertex::pos);
 
         attributeDescriptions[1].binding = 0;
         attributeDescriptions[1].location = 1;
         attributeDescriptions[1].format = VK_FORMAT_R32G32B32A32_SFLOAT;
-        attributeDescriptions[1].offset = offsetof(Vertex, color);
+        attributeDescriptions[1].offset = offsetof(Cube::Vertex, Cube::Vertex::colors);
+        std::cout << "Offset of colors: " << offsetof(Cube::Vertex, Cube::Vertex::colors);
 
-/*        attributeDescriptions[2].binding = 0;
+        /*attributeDescriptions[2].binding = 0;
         attributeDescriptions[2].location = 2;
         attributeDescriptions[2].format = VK_FORMAT_R32G32_SFLOAT;
-        attributeDescriptions[2].offset = offsetof(Vertex, texCoord);*/
+        attributeDescriptions[2].offset = offsetof(Cube::Vertex, Cube::Vertex::texCoords);*/
 
         return attributeDescriptions;
     }
-};
+
 
 struct UniformBufferObject {
     alignas(16) glm::mat4 model;
@@ -121,7 +128,7 @@ struct UniformBufferObject {
     alignas(16) glm::mat4 proj;
 };
 
-/*static const std::vector<Vertex> vertices = {
+static const std::vector<Vertex> vertices = {
             // Vertices                 // Colors+Alpha     // Texcoord U+V
 		// front face 
 		{{-1.0f, -1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}},
@@ -153,7 +160,7 @@ struct UniformBufferObject {
 		{{-1.0f, -1.0f,  1.0f},  {0.0f, 1.0f, 1.0f, 1.0f}},
 		{{1.0f, -1.0f, -1.0f},   {0.0f, 1.0f, 1.0f, 1.0f}},
 		{{-1.0f, -1.0f, -1.0f},  {0.0f, 1.0f, 1.0f, 1.0f}}
-};*/
+};
 
 
 //const std::vector<float> *vertices = &sphere.vertices;
@@ -169,9 +176,9 @@ const std::vector<uint16_t> indices = {
 
 class HelloTriangleApplication {
 public:
-    void run() {
+    void run() {        
         initWindow();
-        initMesh();                
+        initMesh();
         initVulkan();        
         mainLoop();
         cleanup();
@@ -247,7 +254,8 @@ private:
     }
 
     void initMesh() {
-        sphere.UVSphere();
+        //sphere.UVSphere();
+        //cube = new Cube();
 
     }
     //Sphere::Sphere(float centerX, float centerY, float centerZ, float radius, int hseg, int vseg) {
@@ -649,8 +657,8 @@ private:
         VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
         vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 
-        auto bindingDescription = Vertex::getBindingDescription();
-        auto attributeDescriptions = Vertex::getAttributeDescriptions();
+        auto bindingDescription = getBindingDescription();
+        auto attributeDescriptions = getAttributeDescriptions();
 
         vertexInputInfo.vertexBindingDescriptionCount = 1;
         vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
@@ -659,6 +667,7 @@ private:
 
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+        // VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
         inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         inputAssembly.primitiveRestartEnable = VK_FALSE;
 
@@ -959,9 +968,9 @@ private:
     }
 
     void createVertexBuffer() {
-            // Check this
-        VkDeviceSize bufferSize = sizeof(sphere.vertices[0]) * sphere.vertices.size();        
-      std::cout << "Sizeof(vertices[0]); ->" << sizeof(sphere.vertices[0]) << "\n vertices.size() ->" << sphere.getSize(sphere.vertices);
+            // Float size * vertices size
+        VkDeviceSize bufferSize = sizeof(cube.Data[0]) * cube.Data.size();        
+        std::cout << "Vertices.size() ->" << cube.Data.size();
 
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
@@ -969,7 +978,7 @@ private:
 
         void* data;
         vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
-            memcpy(data, sphere.vertices.data(), (size_t) bufferSize);
+            memcpy(data, cube.Data.data(), (size_t) bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
 
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
@@ -981,7 +990,9 @@ private:
     }
 
     void createIndexBuffer() {
-        VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
+            // Float size * indices size
+        VkDeviceSize bufferSize = sizeof(cube.indices[0]) * cube.indices.size();
+        std::cout << "Indices.size() ->" << cube.indices.size();
 
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
@@ -989,7 +1000,7 @@ private:
 
         void* data;
         vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
-            memcpy(data, indices.data(), (size_t) bufferSize);
+            memcpy(data, cube.indices.data(), (size_t) bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
 
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBuffer, indexBufferMemory);
