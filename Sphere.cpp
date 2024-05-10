@@ -6,7 +6,7 @@
 
 #include "Sphere.h"
 
-#define PI 3.14159265358979323846
+const float PI = 3.14159265358f;
 
 	// Constructor
 	Sphere::Sphere(float centerX, float centerY, float centerZ, float radius, int hseg, int vseg) {
@@ -32,46 +32,59 @@
 		this->centerX = centerX;
 		this->centerY = centerY;
 		this->centerZ = centerZ;
-		this->hseg = hseg;
-		this->vseg = vseg;
+		this->lat = hseg;
+		this->lon = vseg;
 
-		
+		std::cout << "Initialization done!";
 	};
 
 	void Sphere::UVSphere() {
 
-		int i,j;
+		int i=0;
+		int j=0;
+
+		Data = {};
 
 		std::cout << "Initializing UVSphere!\n";
 
-		dtheta = 2.0 * PI / (vseg - 1);	
-		dphi = PI / (hseg - 1);
+		dtheta = 2.0f * PI / (float)((float)lat - 1.0f);	
+		dphi = PI / (float)((float)lon - 1.0f);
 
-		for(i=0; i<hseg; i++) {
+		std::cout << "Starting loop!";
+
+		for(int i=0; i<lat; i++) {
+
+			std::cout << "Starting latitude loop";
 
 			theta += dtheta;
 
-			for(j=0;j<vseg;j++) {
+			for(int j=0;j<lon;j++) {
+
+			std::cout << "Starting longtitude loop";
 
 				phi += dphi; 
 
-				Data[i*j*3].pos[i*j*3] = sin(phi) * cos(theta);
-				Data[i*j*3+1].pos[i*j*3+1] = sin(phi) * sin(theta);
-				Data[i*j*3+2].pos[i*j*3+2] = cos(phi);
+/*				Data[i].pos[0] = ( (float)sin(phi) * (float)cos(theta));
+				Data[i].pos[1] = sin(phi) * sin(theta);
+				Data[i].pos[2] = cos(phi);*/
 
 				//std::cout << "Vertex 1: " << vertices[i*j] << "Vertex 2: "<< vertices[i*j+1] << "Vertex 3: " <<vertices[i*j+2] << "\n";
 
-				indices.push_back(i*j*3);
-				indices.push_back(i*j*3+1);
-				indices.push_back(i*j*3+2);
+				indices.push_back(i*j*6);
+				indices.push_back(i*(j+1)*6+1);
+				indices.push_back((i+1)*j*6+2);
+
+				indices.push_back(i*j*6+3);
+				indices.push_back(i*(j+1)*6+4);
+				indices.push_back((i+1)*j*6+5);
 
 				//std::cout << "Indice 1: " << indices[i*j] << "Indice 2: "<< indices[i*j+1] << "Indice 3: " <<indices[i*j+2] << "\n";
 
-				Data[i*j*4].colors[i*j*4] = (1.0f);
-				Data[i*j*4+1].colors[i*j*4+1] = (1.0f);
-				Data[i*j*4+2].colors[i*j*4+2] = (1.0f);
-				Data[i*j*4+3].colors[i*j*4+3] = (1.0f);
-
+				/*Data[i*j].colors[i*j*4] = (1.0f);
+				Data[i*j].colors[i*j*4+1] = (1.0f);
+				Data[i*j].colors[i*j*4+2] = (1.0f);
+				Data[i*j].colors[i*j*4+3] = (1.0f);
+*/
 			}
 
 

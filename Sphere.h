@@ -20,8 +20,8 @@ public:
     float dphi;
     float theta;
     float dtheta;
-    int hseg;
-    int vseg;
+    int lon;
+    int lat;
     float radius;
     float centerX;
     float centerY;
