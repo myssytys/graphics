@@ -14,18 +14,16 @@
 
 		std::cout << "Initializing sphere!\n";
 
-		std::cout << "Vseg: " << vseg << "Hseg: " << hseg;
-
 		phi = 0.0f;
 		theta = 0.0f;
 		dphi = 2*PI/(vseg-1);
 		dtheta = PI/(hseg-1);
 
-		std::vector<float> vertices;
+		/*std::vector<float> vertices;
 		std::vector<int> indices;
 		std::vector<float> colors;
 		std::vector<float> normals;
-		std::vector<float> texCoords;
+		std::vector<float> texCoords;*/
 		
 		
 		//icoindices = new int[120];
@@ -55,24 +53,24 @@
 
 			for(j=0;j<vseg;j++) {
 
-				phi += dphi;
+				phi += dphi; 
 
-				vertices.push_back( centerX+( sin(phi)*radius * cos(theta)*radius));
-				vertices.push_back(centerY+sin(phi)*radius * sin(theta)*radius );
-				vertices.push_back(centerZ+cos(phi)*radius);
+				Data[i*j*3].pos[i*j*3] = sin(phi) * cos(theta);
+				Data[i*j*3+1].pos[i*j*3+1] = sin(phi) * sin(theta);
+				Data[i*j*3+2].pos[i*j*3+2] = cos(phi);
 
-				std::cout << "Vertex 1: " << vertices[i*j] << "Vertex 2: "<< vertices[i*j+1] << "Vertex 3: " <<vertices[i*j+2] << "\n";
+				//std::cout << "Vertex 1: " << vertices[i*j] << "Vertex 2: "<< vertices[i*j+1] << "Vertex 3: " <<vertices[i*j+2] << "\n";
 
-				indices.push_back(i*j);
-				indices.push_back(i*j+1);
-				indices.push_back(i*j+2);
+				indices.push_back(i*j*3);
+				indices.push_back(i*j*3+1);
+				indices.push_back(i*j*3+2);
 
-				std::cout << "Indice 1: " << indices[i*j] << "Indice 2: "<< indices[i*j+1] << "Indice 3: " <<indices[i*j+2] << "\n";
+				//std::cout << "Indice 1: " << indices[i*j] << "Indice 2: "<< indices[i*j+1] << "Indice 3: " <<indices[i*j+2] << "\n";
 
-				/*colors[i*j] = 1.0f;
-				colors[i*j+1] = 1.0f;
-				colors[i*j+2] = 1.0f;
-				colors[i*j+3] = 1.0f;*/
+				Data[i*j*4].colors[i*j*4] = (1.0f);
+				Data[i*j*4+1].colors[i*j*4+1] = (1.0f);
+				Data[i*j*4+2].colors[i*j*4+2] = (1.0f);
+				Data[i*j*4+3].colors[i*j*4+3] = (1.0f);
 
 			}
 
