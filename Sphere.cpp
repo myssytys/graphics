@@ -64,9 +64,13 @@ const float PI = 3.14159265358f;
 
 				phi += dphi; 
 
-/*				Data[i].pos[0] = ( (float)sin(phi) * (float)cos(theta));
-				Data[i].pos[1] = sin(phi) * sin(theta);
-				Data[i].pos[2] = cos(phi);*/
+				glm::vec3 position = glm::vec3(sin(phi) * cos(theta), ( (float)sin(phi) * (float)sin(theta)), (float)cos(phi));
+				glm::vec4 colors = glm::vec4();
+				glm::vec2 texCoords = glm::vec2();
+				
+				//Data.push_back();
+/*				Data[i].pos[1] = sin(phi) * sin(theta);
+				Data[i].pos[2] = cos(phi);**
 
 				//std::cout << "Vertex 1: " << vertices[i*j] << "Vertex 2: "<< vertices[i*j+1] << "Vertex 3: " <<vertices[i*j+2] << "\n";
 

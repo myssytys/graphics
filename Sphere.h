@@ -11,10 +11,14 @@ public:
         glm::vec3 pos;
         glm::vec4 colors;
         glm::vec2 texCoords;
-        glm::vec3 normals;
+        //glm::vec3 normals;
     };
     
     std::vector<Vertex> Data;
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec4> colors;
+    std::vector<glm::vec2> texCoords;
+    //std::vector<glm::vec3> normals;
     std::vector<uint16_t> indices;
     float phi;
     float dphi;
