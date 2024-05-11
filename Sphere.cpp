@@ -65,13 +65,16 @@ const float PI = 3.14159265358f;
 				phi += dphi; 
 
 				glm::vec3 position = glm::vec3(sin(phi) * cos(theta), ( (float)sin(phi) * (float)sin(theta)), (float)cos(phi));
-				glm::vec4 colors = glm::vec4();
-				glm::vec2 texCoords = glm::vec2();
-				
-				//Data.push_back();
-/*				Data[i].pos[1] = sin(phi) * sin(theta);
-				Data[i].pos[2] = cos(phi);**
+				glm::vec4 colors = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+				glm::vec2 texCoords = glm::vec2(0.0f, 0.0f);
 
+				Vertex newVertex;
+				newVertex.pos = position;
+				newVertex.colors = colors;
+				newVertex.texCoords = texCoords;
+				
+				Data.push_back(newVertex);
+				
 				//std::cout << "Vertex 1: " << vertices[i*j] << "Vertex 2: "<< vertices[i*j+1] << "Vertex 3: " <<vertices[i*j+2] << "\n";
 
 				indices.push_back(i*j*6);
@@ -83,16 +86,7 @@ const float PI = 3.14159265358f;
 				indices.push_back((i+1)*j*6+5);
 
 				//std::cout << "Indice 1: " << indices[i*j] << "Indice 2: "<< indices[i*j+1] << "Indice 3: " <<indices[i*j+2] << "\n";
-
-				/*Data[i*j].colors[i*j*4] = (1.0f);
-				Data[i*j].colors[i*j*4+1] = (1.0f);
-				Data[i*j].colors[i*j*4+2] = (1.0f);
-				Data[i*j].colors[i*j*4+3] = (1.0f);
-*/
 			}
-
-
-
 		}
 
 	};
