@@ -9,7 +9,7 @@
 const float PI = 3.14159265358f;
 
 	// Constructor
-	Sphere::Sphere(float centerX, float centerY, float centerZ, float radius, int hseg, int vseg) {
+	Sphere::Sphere(float centerX, float centerY, float centerZ, float radius, u_int16_t hseg, u_int16_t vseg) {
 
 
 		std::cout << "Initializing sphere!\n";
@@ -40,40 +40,39 @@ const float PI = 3.14159265358f;
 
 	void Sphere::UVSphere() {
 
-		int i=0;
-		int j=0;
-
-		Data = {};
+		//Data = {};
 
 		std::cout << "Initializing UVSphere!\n";
 
-		dtheta = 2.0f * PI / (float)((float)lat - 1.0f);	
-		dphi = PI / (float)((float)lon - 1.0f);
+		dtheta = 2.0f * PI / (float)(lat);	
+		dphi =  2.0f * PI / (float)(lon );
 
-		std::cout << "Starting loop!";
+		std::cout << "Starting loop! Dtheta: " << dtheta << "DPhi: " << dphi;
 
-		for(int i=0; i<lat; i++) {
+		for(int i=0; i<lat; i++) {			
 
-			std::cout << "Starting latitude loop";
+				phi += dphi;
 
-			theta += dtheta;
+			for(int j=0;j<lon;j++) {							
 
-			for(int j=0;j<lon;j++) {
+				theta += dtheta;
 
-			std::cout << "Starting longtitude loop";
-
-				phi += dphi; 
-
-				glm::vec3 position = glm::vec3(sin(phi) * cos(theta), ( (float)sin(phi) * (float)sin(theta)), (float)cos(phi));
+				glm::vec3 position = glm::vec3( (float)(cos(theta) * cos(phi)), (float)(sin(theta) * cos(phi)), (float)sin(phi));
 				glm::vec4 colors = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-				glm::vec2 texCoords = glm::vec2(0.0f, 0.0f);
+				//glm::vec2 texCoords = glm::vec2(0.0f, 0.0f);
+				
 
 				Vertex newVertex;
-				newVertex.pos = position;
+				newVertex.pos.x = position.x;
+				newVertex.pos.y = position.y;
+				newVertex.pos.z = position.z;
 				newVertex.colors = colors;
-				newVertex.texCoords = texCoords;
+				//newVertex.texCoords = texCoords;
+
+				//std::cout << "NX: " << newVertex.pos.x << "NY: " << newVertex.pos.y << "NZ: " << newVertex.pos.z << std::endl;
 				
 				Data.push_back(newVertex);
+				
 				
 				//std::cout << "Vertex 1: " << vertices[i*j] << "Vertex 2: "<< vertices[i*j+1] << "Vertex 3: " <<vertices[i*j+2] << "\n";
 
@@ -88,6 +87,9 @@ const float PI = 3.14159265358f;
 				//std::cout << "Indice 1: " << indices[i*j] << "Indice 2: "<< indices[i*j+1] << "Indice 3: " <<indices[i*j+2] << "\n";
 			}
 		}
+
+		std::cout << "DataSize: " << Data.size();
+		std::cout << "DataData: " << Data.data();
 
 	};
 
