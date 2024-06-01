@@ -90,7 +90,7 @@ struct Vertex {
     VkVertexInputBindingDescription getBindingDescription() {
         VkVertexInputBindingDescription bindingDescription{};
         bindingDescription.binding = 0;
-        bindingDescription.stride = sizeof(Cube::Vertex);
+        bindingDescription.stride = sizeof(Sphere::Vertex);
         //bindingDescription.stride = 0;
         bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
 
@@ -104,14 +104,14 @@ struct Vertex {
         attributeDescriptions[0].location = 0;
         attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;        
         //attributeDescriptions[0].offset = 0;
-        attributeDescriptions[0].offset = offsetof(Cube::Vertex, Cube::Vertex::pos);
-        std::cout << "Offset of pos: " << offsetof(Cube::Vertex, Cube::Vertex::pos);
+        attributeDescriptions[0].offset = offsetof(Sphere::Vertex, Sphere::Vertex::pos);
+        std::cout << "Offset of pos: " << offsetof(Sphere::Vertex, Sphere::Vertex::pos);
 
         attributeDescriptions[1].binding = 0;
         attributeDescriptions[1].location = 1;
         attributeDescriptions[1].format = VK_FORMAT_R32G32B32A32_SFLOAT;
-        attributeDescriptions[1].offset = offsetof(Cube::Vertex, Cube::Vertex::colors);
-        std::cout << "Offset of colors: " << offsetof(Cube::Vertex, Cube::Vertex::colors);
+        attributeDescriptions[1].offset = offsetof(Sphere::Vertex, Sphere::Vertex::colors);
+        std::cout << "Offset of colors: " << offsetof(Sphere::Vertex, Sphere::Vertex::colors);
 
         /*attributeDescriptions[2].binding = 0;
         attributeDescriptions[2].location = 2;
@@ -667,11 +667,11 @@ private:
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
         // VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
         //inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
-        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+        inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
         inputAssembly.primitiveRestartEnable = VK_FALSE;
 
         VkPipelineViewportStateCreateInfo viewportState{};
-        viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+        viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;        
         viewportState.viewportCount = 1;
         viewportState.scissorCount = 1;
 
@@ -684,6 +684,7 @@ private:
         rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
         rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
         rasterizer.depthBiasEnable = VK_FALSE;
+        
 
         VkPipelineMultisampleStateCreateInfo multisampling{};
         multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
@@ -968,17 +969,17 @@ private:
 
     void createVertexBuffer() {
             // Float size * vertices size
-        VkDeviceSize bufferSize = sizeof(cube.Data[0]) * cube.Data.size();        
-        std::cout << "Vertices.size() ->" << cube.Data.size() << std::endl;
+        VkDeviceSize bufferSize = sizeof(sphere.Data[0]) * sphere.Data.size();        
+        std::cout << "Vertices.size() ->" << sphere.Data.size() << std::endl;
 
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
         void* data;
-        std::cout << "Sphere Data: " << cube.Data.data() << std::endl;
+        std::cout << "Sphere Data: " << sphere.Data.data() << std::endl;
         vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
-            memcpy(data, cube.Data.data(), (size_t) bufferSize);
+            memcpy(data, sphere.Data.data(), (size_t) bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
 
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBuffer, vertexBufferMemory);
@@ -991,8 +992,8 @@ private:
 
     void createIndexBuffer() {
             // Float size * indices size
-        VkDeviceSize bufferSize = sizeof(cube.indices[0]) * cube.indices.size();
-        std::cout << "Indices.size() ->" << cube.indices.size();
+        VkDeviceSize bufferSize = sizeof(sphere.indices[0]) * sphere.indices.size();
+        std::cout << "Indices.size() ->" << sphere.indices.size();
 
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
@@ -1000,7 +1001,7 @@ private:
 
         void* data;
         vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
-            memcpy(data, cube.indices.data(), (size_t) bufferSize);
+            memcpy(data, sphere.indices.data(), (size_t) bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
 
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBuffer, indexBufferMemory);
@@ -1095,6 +1096,7 @@ private:
         bufferInfo.size = size;
         bufferInfo.usage = usage;
         bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
 
         if (vkCreateBuffer(device, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
             throw std::runtime_error("failed to create buffer!");
@@ -1230,7 +1232,7 @@ private:
 
             vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
 
-            vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
+            vkCmdDrawIndexed(commandBuffer, static_cast<uint16_t>(sphere.indices.size()), 1, 0, 0, 0);
 
         vkCmdEndRenderPass(commandBuffer);
 
@@ -1547,6 +1549,11 @@ private:
 
 int main() {
     HelloTriangleApplication app;
+
+        VkMultiDrawInfoEXT drawInfo{};
+        drawInfo.firstVertex = 0;
+        drawInfo.vertexCount = 400;
+
 
     try {
         app.run();
