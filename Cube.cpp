@@ -3,7 +3,7 @@
 Cube::Cube() {
 
 	std::cout << "Test! -><-";
-/*	    Data = {
+	    Data = {
             // Vertices                 // Colors+Alpha     // Texcoord U+V
 		// front face 
 		{{-1.0f, -1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
@@ -35,9 +35,9 @@ Cube::Cube() {
 		{{-1.0f, -1.0f,  1.0f},  {0.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
 		{{1.0f, -1.0f, -1.0f},   {0.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
 		{{-1.0f, -1.0f, -1.0f},  {0.0f, 1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
-};*/
+};
 
- 	Data = {
+ /*	Data = {
             // Vertices                 // Colors+Alpha     // Texcoord U+V
 		// front face 
 		{{-1.0f, -1.0f,  1.0f},  {0.0f, 1.0f, 1.0f, 1.0f}},
@@ -70,14 +70,14 @@ Cube::Cube() {
 		{{1.0f, -1.0f, -1.0f},   {0.0f, 1.0f, 1.0f, 1.0f}},
 		{{-1.0f, -1.0f, -1.0f},  {0.0f, 1.0f, 1.0f, 1.0f}}
 	
-	};
+	};*/
 	
 
 	std::cout << "Data size: " << Data.size();
 
 	indices={
 		 0, 1, 2,  2, 1, 3,	/* front */
-		 6, 5, 7,  6, 5, 7,	/* back */
+		 4, 5, 6,  6, 5, 7,	/* back */
 		 8, 9,10, 10, 9,11,	/* left */
 		12,13,14, 14,13,15,	/* right */
 		16,17,18, 18,17,19,	/* top */
