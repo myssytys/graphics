@@ -1,11 +1,9 @@
 #include "Cube.h"
 
-#include <iostream>
-
 Cube::Cube() {
 
 	std::cout << "Test! -><-";
-	  /*  Data = {
+/*	    Data = {
             // Vertices                 // Colors+Alpha     // Texcoord U+V
 		// front face 
 		{{-1.0f, -1.0f,  1.0f},  {1.0f, 1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},

@@ -254,9 +254,7 @@ private:
     }
 
     void initMesh() {
-        //sphere.UVSphere();
-        //cube = new Cube();
-
+        sphere.UVSphere();        
     }
     //Sphere::Sphere(float centerX, float centerY, float centerZ, float radius, int hseg, int vseg) {
 
@@ -384,7 +382,7 @@ private:
         appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
         appInfo.pEngineName = "No Engine";
         appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
-        appInfo.apiVersion = VK_API_VERSION_1_0;
+        appInfo.apiVersion = VK_API_VERSION_1_3;
 
         VkInstanceCreateInfo createInfo{};
         createInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -668,6 +666,7 @@ private:
         VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
         inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
         // VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
+        //inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_POINT_LIST;
         inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
         inputAssembly.primitiveRestartEnable = VK_FALSE;
 
@@ -680,7 +679,7 @@ private:
         rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
         rasterizer.depthClampEnable = VK_FALSE;
         rasterizer.rasterizerDiscardEnable = VK_FALSE;
-        rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+        rasterizer.polygonMode = VK_POLYGON_MODE_FILL;        
         rasterizer.lineWidth = 1.0f;
         rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
         rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
@@ -970,13 +969,14 @@ private:
     void createVertexBuffer() {
             // Float size * vertices size
         VkDeviceSize bufferSize = sizeof(cube.Data[0]) * cube.Data.size();        
-        std::cout << "Vertices.size() ->" << cube.Data.size();
+        std::cout << "Vertices.size() ->" << cube.Data.size() << std::endl;
 
         VkBuffer stagingBuffer;
         VkDeviceMemory stagingBufferMemory;
         createBuffer(bufferSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
         void* data;
+        std::cout << "Sphere Data: " << cube.Data.data() << std::endl;
         vkMapMemory(device, stagingBufferMemory, 0, bufferSize, 0, &data);
             memcpy(data, cube.Data.data(), (size_t) bufferSize);
         vkUnmapMemory(device, stagingBufferMemory);
