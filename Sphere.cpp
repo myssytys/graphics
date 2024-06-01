@@ -45,7 +45,7 @@ const float PI = 3.14159265358f;
 		std::cout << "Initializing UVSphere!\n";
 
 		dtheta = 2.0f * PI / (float)(lat);	
-		dphi =  2.0f * PI / (float)(lon );
+		dphi =  2.0f * PI / (float)(lon);
 
 		std::cout << "Starting loop! Dtheta: " << dtheta << "DPhi: " << dphi;
 
