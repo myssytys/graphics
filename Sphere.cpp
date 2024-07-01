@@ -57,7 +57,7 @@ const float PI = 3.14159265358f;
 
 				theta += dtheta;
 
-				glm::vec3 position = glm::vec3( (float)(cos(theta) * cos(phi)), (float)(sin(theta) * cos(phi)), (float)sin(phi));
+				glm::vec3 position = glm::vec3( (float)(sin(theta) * cos(phi)), (float)sin(phi)*sin(theta), (float) cos(theta));
 				glm::vec4 colors = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 				//glm::vec2 texCoords = glm::vec2(0.0f, 0.0f);
 				
@@ -75,7 +75,14 @@ const float PI = 3.14159265358f;
 				
 				
 				//std::cout << "Vertex 1: " << vertices[i*j] << "Vertex 2: "<< vertices[i*j+1] << "Vertex 3: " <<vertices[i*j+2] << "\n";
+				if(i==0) {
+					indices.push_back(0);
+					indices.push_back(0);
+					indices.push_back(0);
+				}
 
+				else if(i!=0 || j!=0) {
+				
 				indices.push_back(i*j*6);
 				indices.push_back(i*(j+1)*6+1);
 				indices.push_back((i+1)*j*6+2);
@@ -83,7 +90,13 @@ const float PI = 3.14159265358f;
 				indices.push_back(i*j*6+3);
 				indices.push_back(i*(j+1)*6+4);
 				indices.push_back((i+1)*j*6+5);
+				}
+				else if(j==0) {
+					indices.push_back(0);
+					indices.push_back(0);
+					indices.push_back(0);
 
+				}
 				//std::cout << "Indice 1: " << indices[i*j] << "Indice 2: "<< indices[i*j+1] << "Indice 3: " <<indices[i*j+2] << "\n";
 			}
 		}
