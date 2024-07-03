@@ -82,14 +82,14 @@ const float PI = 3.14159265358f;
 				}
 
 				else if(i!=0 || j!=0) {
-				
-				indices.push_back(i*j*6);
-				indices.push_back(i*(j+1)*6+1);
-				indices.push_back((i+1)*j*6+2);
+				// CCW
+				indices.push_back((i)*(j));
+				indices.push_back(i+1*(j));
+				indices.push_back((i)*(j+1));
 
-				indices.push_back(i*j*6+3);
-				indices.push_back(i*(j+1)*6+4);
-				indices.push_back((i+1)*j*6+5);
+				indices.push_back((i+1)*(j));
+				indices.push_back(i*(j));
+				indices.push_back((i+1)*(j+1));
 				}
 				else if(j==0) {
 					indices.push_back(0);
