@@ -55,10 +55,11 @@ const float PI = 3.14159265358f;
 
 			for(int j=0;j<lon;j++) {							
 
+				
 				theta += dtheta;
 
 				glm::vec3 position = glm::vec3( (float)(sin(theta) * cos(phi)), (float)sin(phi)*sin(theta), (float) cos(theta));
-				glm::vec4 colors = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+				glm::vec4 colors = glm::vec4(i*1.0f/j, i*1.0f/j, i*1.0f/j, 1.0f);
 				//glm::vec2 texCoords = glm::vec2(0.0f, 0.0f);
 				
 
@@ -75,6 +76,14 @@ const float PI = 3.14159265358f;
 				
 				
 				//std::cout << "Vertex 1: " << vertices[i*j] << "Vertex 2: "<< vertices[i*j+1] << "Vertex 3: " <<vertices[i*j+2] << "\n";
+				
+				//std::cout << "Indice 1: " << indices[i*j] << "Indice 2: "<< indices[i*j+1] << "Indice 3: " <<indices[i*j+2] << "\n";
+			}
+		}
+
+		
+		for(int i=0; i<lat; i++) {
+			for(int j=0; j<lon; j++) {
 				if(i==0) {
 					indices.push_back(0);
 					indices.push_back(0);
@@ -82,22 +91,28 @@ const float PI = 3.14159265358f;
 				}
 
 				else if(i!=0 || j!=0) {
-				// CCW
-				indices.push_back((i)*(j));
-				indices.push_back(i+1*(j));
-				indices.push_back((i)*(j+1));
 
-				indices.push_back((i+1)*(j));
-				indices.push_back(i*(j));
-				indices.push_back((i+1)*(j+1));
+				int top_left = i*(lat)+j;
+				int top_right = i*(lat+1)+j;
+				int bottom_left = (i+1)*(lat + 1)+j;
+				int bottom_right = bottom_left+1;
+				// CW
+				indices.push_back(top_left);
+				indices.push_back(top_right);
+				indices.push_back(bottom_left);
+
+				indices.push_back(top_right);
+				indices.push_back(bottom_right);
+				indices.push_back(bottom_left);
+
+
 				}
 				else if(j==0) {
-					indices.push_back(0);
-					indices.push_back(0);
-					indices.push_back(0);
+					indices.push_back(i*j);
+					indices.push_back(i*j);
+					indices.push_back(i*j);
 
 				}
-				//std::cout << "Indice 1: " << indices[i*j] << "Indice 2: "<< indices[i*j+1] << "Indice 3: " <<indices[i*j+2] << "\n";
 			}
 		}
 
