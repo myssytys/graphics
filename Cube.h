@@ -11,8 +11,9 @@ class Cube {
 
     struct Vertex {
         glm::vec3 pos;
-        glm::vec4 colors;
-        glm::vec2 texCoords;
+        glm::vec3 normals;
+        glm::vec4 colors;        
+        glm::vec2 texCoords;        
     };
     
     //glm::vec3 vertices;
