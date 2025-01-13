@@ -6,7 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#include "stb/stb_image.h"
 
 #include <iostream>
 #include <fstream>
@@ -144,7 +144,7 @@ static const std::vector<Vertex> vertices = {
 		{{-1.0f, -1.0f, -1.0f},  {1.0f, 1.0f, 0.0f, 1.0f}},
 		{{-1.0f, -1.0f,  1.0f},  {1.0f, 1.0f, 0.0f, 1.0f}},
 		{{-1.0f,  1.0f, -1.0f},  {1.0f, 1.0f, 0.0f, 1.0f}},
-		{{-1.0f,  1.0f,  1.0f},  {1.0f, 1.0f, 0.0f, 1.0f}},
+		{{-1.0f, 1.0f,  1.0f},  {1.0f, 1.0f, 0.0f, 1.0f}},
 		// right face 
 		 {{1.0f, -1.0f,  1.0f},  {1.0f, 0.0f, 0.0f, 1.0f}},
 		 {{1.0f, -1.0f, -1.0f},  {1.0f, 0.0f, 0.0f, 1.0f}},
